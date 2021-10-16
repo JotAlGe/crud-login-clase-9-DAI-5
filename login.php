@@ -1,39 +1,38 @@
-<?php 
+<?php
 session_start();
 //print_r($_SESSION);
 require_once 'funciones/conexion.php';
-$MiConexion=ConexionBD();
+$MiConexion = ConexionBD();
 
 
 
-$Mensaje='';
+$Mensaje = '';
 if (!empty($_POST['BotonLogin'])) {
 
     require_once 'funciones/login.php';
     $UsuarioLogueado = DatosLogin($_POST['email'], $_POST['password'], $MiConexion);
 
     //la consulta con la BD para que encuentre un usuario registrado con el usuario y clave brindados
-    if ( !empty($UsuarioLogueado)) {
-       // $Mensaje ='ok! ya puedes ingresar';
+    if (!empty($UsuarioLogueado)) {
+        // $Mensaje ='ok! ya puedes ingresar';
 
-       //generar los valores del usuario (esto va a venir de mi BD)
+        //generar los valores del usuario (esto va a venir de mi BD)
         $_SESSION['Usuario_Nombre']     =   $UsuarioLogueado['NOMBRE'];
         $_SESSION['Usuario_Apellido']   =   $UsuarioLogueado['APELLIDO'];
         $_SESSION['Usuario_Nivel']      =   $UsuarioLogueado['NIVEL'];
         $_SESSION['Usuario_Img']        =   $UsuarioLogueado['IMG'];
-        $_SESSION['Usuario_Saludo']        =   $UsuarioLogueado['SALUDO'];
+        $_SESSION['Usuario_Saludo']     =   $UsuarioLogueado['SALUDO'];
 
-        if ($UsuarioLogueado['ACTIVO']==0) {
-            $Mensaje ='Ud. no se encuentra activo en el sistema.';
-        }else {
-            header('Location: index.php');
+        // evalúa si la cuenta está activa o no
+        if ($UsuarioLogueado['ACTIVO'] == 0) {
+            $Mensaje = 'Ud. no se encuentra activo en el sistema.';
+        } else {
+            header('Location: index.php'); // manda al panel principal del usuario
             exit;
         }
-
-    }else {
-        $Mensaje='Datos incorrectos, ingresa nuevamente.';
+    } else {
+        $Mensaje = 'Datos incorrectos, ingresa nuevamente.';
     }
-
 }
 ?>
 <!DOCTYPE html>
@@ -80,29 +79,29 @@ if (!empty($_POST['BotonLogin'])) {
                         <h3 class="panel-title">Ingresa tus datos</h3>
                     </div>
                     <div class="panel-body">
-                        
-                    <div>
-                        <img src='dist/img/login.png' />
-                    </div>
+
+                        <div>
+                            <img src='dist/img/login.png' />
+                        </div>
                         <form role="form" method='post'>
-                            <?php if (!empty ($Mensaje)) { ?>
+                            <?php if (!empty($Mensaje)) { ?>
                                 <div class="alert alert-warning alert-dismissable">
                                     <?php echo $Mensaje; ?>
                                 </div>
                             <?php } ?>
-                            
+
                             <fieldset>
                                 <div class="form-group">
                                     <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus value=''>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="Password" name="password" type="password" >
+                                    <input class="form-control" placeholder="Password" name="password" type="password">
                                 </div>
                                 <div class="form-group text-center">
-                                Si no tienes cuenta, puedes registrarte <a href="registro.php" > aqui</a>
+                                    Si no tienes cuenta, puedes registrarte <a href="registro.php"> aqui</a>
                                 </div>
                                 <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-default" value="Login" name="BotonLogin" >Ingresar</button>                                 
+                                    <button type="submit" class="btn btn-default" value="Login" name="BotonLogin">Ingresar</button>
                                 </div>
                             </fieldset>
                         </form>

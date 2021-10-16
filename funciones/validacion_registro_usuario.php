@@ -30,7 +30,7 @@ function Validar_Datos() {
 
     
     //con esto aseguramos que limpiamos espacios y limpiamos de caracteres de codigo ingresados
-    foreach($_POST as $Id=>$Valor){
+    foreach($_POST as $Id){
         $_POST[$Id] = trim($_POST[$Id]);
         $_POST[$Id] = strip_tags($_POST[$Id]);
     }
@@ -39,5 +39,3 @@ function Validar_Datos() {
     return $vMensaje;
 
 }
-
-?>
